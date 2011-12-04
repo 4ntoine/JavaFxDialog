@@ -392,7 +392,7 @@ public class Dialog extends Stage {
     }
     
     /**
-     * Show error dialog box
+     * Show error dialog box with stacktrace
      * @param title dialog title
      * @param message dialog message
      * @param t throwable
@@ -412,7 +412,7 @@ public class Dialog extends Stage {
     }
     
     /**
-     * Show error dialog box
+     * Show error dialog box with stacktrace
      * @param title dialog title     
      * @param message dialog message
      * @param t throwable
