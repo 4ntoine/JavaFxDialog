@@ -360,7 +360,7 @@ public class Dialog extends Stage {
          */
         public Dialog build() {
             if (stage.buttonsPanel.getChildren().size() == 0)
-                throw new RuntimeException("Add one confirmation dialog button at least");
+                throw new RuntimeException("Add one dialog button at least");
             
             stage.buttonsPanel.getChildren().get(0).requestFocus();
             return stage;
