@@ -69,7 +69,7 @@ public class Dialog extends Stage {
     /**
      * Dialog builder
      */
-    protected static class Builder {
+    public static class Builder {
         protected static final int STACKTRACE_LABEL_MAXHEIGHT = 240;
         protected static final int MESSAGE_MIN_WIDTH = 180;
         protected static final int MESSAGE_MAX_WIDTH = 800;
@@ -268,22 +268,32 @@ public class Dialog extends Stage {
             stage.icon.setImage(image);
         }
         
-        public Builder setWarningIcon() {
+        protected Builder setWarningIcon() {
             setIconFromResource(ICON_PATH + "warningIcon.png");
             return this;
         }
         
-        public Builder setErrorIcon() {
+        protected Builder setErrorIcon() {
             setIconFromResource(ICON_PATH + "errorIcon.png");
             return this;
         }
         
-        public Builder setInfoIcon() {
+        protected Builder setThrowableIcon() {
+            setIconFromResource(ICON_PATH + "bugIcon.png");
+            return this;
+        }
+        
+        protected Builder setInfoIcon() {
             setIconFromResource(ICON_PATH + "infoIcon.png");
             return this;
         }
+        
+        protected Builder setConfirmationIcon() {
+            setIconFromResource(ICON_PATH + "confirmationIcon.png");
+            return this;
+        }
                 
-        public Builder addOkButton() {
+        protected Builder addOkButton() {
             stage.okButton = new Button("OK");
             stage.okButton.setPrefWidth(BUTTON_WIDTH);
             stage.okButton.setOnAction(new EventHandler<ActionEvent> () {
@@ -296,9 +306,63 @@ public class Dialog extends Stage {
             stage.buttonsPanel.getChildren().add(stage.okButton);
             return this;
         }
+
+        protected Builder addConfirmationButton(String buttonCaption, final EventHandler actionHandler) {
+            Button confirmationButton = new Button(buttonCaption);
+            confirmationButton.setMinWidth(BUTTON_WIDTH);
+            confirmationButton.setOnAction(new EventHandler<ActionEvent>() {
+
+                public void handle(ActionEvent t) {
+                    stage.close();
+                    if (actionHandler != null)
+                        actionHandler.handle(t);
+                }
+            });
+            
+            stage.buttonsPanel.getChildren().add(confirmationButton);
+            return this;
+        }
         
+        /**
+         * Add Yes button to confirmation dialog
+         * 
+         * @param actionHandler action handler
+         * @return 
+         */
+        public Builder addYesButton(EventHandler actionHandler) {
+            return addConfirmationButton("Yes", actionHandler);
+        }
+        
+        /**
+         * Add No button to confirmation dialog
+         * 
+         * @param actionHandler action handler
+         * @return 
+         */
+        public Builder addNoButton(EventHandler actionHandler) {
+            return addConfirmationButton("No", actionHandler);
+        }
+        
+        /**
+         * Add Cancel button to confirmation dialog
+         * 
+         * @param actionHandler action handler
+         * @return 
+         */
+        public Builder addCancelButton(EventHandler actionHandler) {
+            return addConfirmationButton("Cancel", actionHandler);
+        }
+        
+        /**
+         * Build dialog
+         * 
+         * @return dialog instance
+         */
         public Dialog build() {
-            stage.okButton.requestFocus();
+            if (stage.buttonsPanel.getChildren().size() == 0)
+                throw new RuntimeException("Add at least one dialog button");
+            
+            stage.buttonsPanel.getChildren().get(0).requestFocus();
             return stage;
         }
         
@@ -393,6 +457,7 @@ public class Dialog extends Stage {
     
     /**
      * Show error dialog box with stacktrace
+     * 
      * @param title dialog title
      * @param message dialog message
      * @param t throwable
@@ -403,7 +468,7 @@ public class Dialog extends Stage {
             .create()
             .setOwner(owner)
             .setTitle(title)
-            .setErrorIcon()
+            .setThrowableIcon()
             .setMessage(message)
             .setStackTrace(t)
             .addOkButton()
@@ -413,11 +478,40 @@ public class Dialog extends Stage {
     
     /**
      * Show error dialog box with stacktrace
+     * 
      * @param title dialog title     
      * @param message dialog message
      * @param t throwable
      */
     public static void showThrowable(String title, String message, Throwable t) {
         showThrowable(title, message, t, null);
+    }
+    
+    /**
+     * Build confirmation dialog builder
+     * 
+     * @param title dialog title     
+     * @param message dialog message
+     * @param owner parent window
+     * @return 
+     */
+    public static Builder buildConfirmation(String title, String message, Window owner) {
+        return new Builder()
+            .create()
+            .setOwner(owner)
+            .setTitle(title)
+            .setConfirmationIcon()
+            .setMessage(message);
+    }
+    
+    /**
+     * Build confirmation dialog builder
+     * 
+     * @param title dialog title     
+     * @param message dialog message
+     * @return 
+     */
+    public static Builder buildConfirmation(String title, String message) {
+        return buildConfirmation(title, message, null);
     }
 }
