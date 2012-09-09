@@ -105,7 +105,7 @@ public class Dialog extends Stage {
             stage.messageBox.getChildren().add(stage.messageLabel);
             stage.borderPanel.setCenter(stage.messageBox);
             BorderPane.setAlignment(stage.messageBox, Pos.CENTER);
-            BorderPane.setMargin(stage.messageBox, new Insets(MARGIN, MARGIN, MARGIN, 0));
+            BorderPane.setMargin(stage.messageBox, new Insets(MARGIN, MARGIN, MARGIN, 2 * MARGIN));
             
             // buttons
             stage.buttonsPanel = new HBox();
