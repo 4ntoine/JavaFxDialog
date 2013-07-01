@@ -307,7 +307,7 @@ public class Dialog extends Stage {
             return this;
         }
 
-        protected Builder addConfirmationButton(String buttonCaption, final EventHandler actionHandler) {
+        public Builder addConfirmationButton(String buttonCaption, final EventHandler actionHandler) {
             Button confirmationButton = new Button(buttonCaption);
             confirmationButton.setMinWidth(BUTTON_WIDTH);
             confirmationButton.setOnAction(new EventHandler<ActionEvent>() {
