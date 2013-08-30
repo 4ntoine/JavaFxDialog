@@ -130,6 +130,13 @@ public class Dialog extends Stage {
             return this;
         }
         
+        public Builder setModality(Modality modality) {
+             if (modality != null) {
+                stage.initModality(modality);
+             }
+             return this;
+        }
+        
         public Builder setOwner(Window owner) {
             if (owner != null) {
                 stage.initOwner(owner);
